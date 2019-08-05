@@ -26,7 +26,7 @@ public class Transaction implements Serializable {
 
     @Column(name = "partner_transaction_id")
     @NotNull
-    private String partnerTransactionId;
+    private Long partnerTransactionId;
 
     @Column(name = "discount_rule_id")
     @NotNull
@@ -54,4 +54,92 @@ public class Transaction implements Serializable {
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getPartnerId() {
+        return partnerId;
+    }
+
+    public void setPartnerId(Long partnerId) {
+        this.partnerId = partnerId;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Long getPartnerTransactionId() {
+        return partnerTransactionId;
+    }
+
+    public void setPartnerTransactionId(Long partnerTransactionId) {
+        this.partnerTransactionId = partnerTransactionId;
+    }
+
+    public Long getDicountRuleId() {
+        return dicountRuleId;
+    }
+
+    public void setDicountRuleId(Long dicountRuleId) {
+        this.dicountRuleId = dicountRuleId;
+    }
+
+    public Double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Double amount) {
+        this.amount = amount;
+    }
+
+    public Double getPayOut() {
+        return payOut;
+    }
+
+    public void setPayOut(Double payOut) {
+        this.payOut = payOut;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public Date getDeleatedAt() {
+        return deleatedAt;
+    }
+
+    public void setDeleatedAt(Date deleatedAt) {
+        this.deleatedAt = deleatedAt;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
 }

@@ -23,14 +23,17 @@ public class DiscountRules implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long discountrulesId;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="partnerId", referencedColumnName = "id")
     private Partner partner;
 
-    @Column(name = "rule_rank",length = 10)
+    @Column(name = "rule_rank")
     private Integer ruleRank;
+
+    @Column(name = "priority")
+    private Integer priority;
 
 
     @Column(name = "is_active")
@@ -131,12 +134,12 @@ public class DiscountRules implements Serializable {
     }
 
 
-    public Long getDiscountrulesId() {
-        return discountrulesId;
+    public Long getId() {
+        return id;
     }
 
-    public void setDiscountrulesId(Long discountrulesId) {
-        this.discountrulesId = discountrulesId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -163,11 +166,11 @@ public class DiscountRules implements Serializable {
         isCountBased = countBased;
     }
 
-    public Boolean getNew() {
+    public Boolean getIsNew() {
         return isNew;
     }
 
-    public void setNew(Boolean aNew) {
+    public void setIsNew(Boolean aNew) {
         isNew = aNew;
     }
 
@@ -281,6 +284,14 @@ public class DiscountRules implements Serializable {
 
     public void setRuleRank(Integer ruleRank) {
         this.ruleRank = ruleRank;
+    }
+
+    public Integer getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Integer priority) {
+        this.priority = priority;
     }
 
     public Boolean getActive() {

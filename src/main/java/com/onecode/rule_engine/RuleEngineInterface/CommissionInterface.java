@@ -9,7 +9,7 @@ import com.onecode.rule_engine.responses.RuleEngineResponse;
 public interface CommissionInterface {
 
 	//Method For fixed commission
-	public RuleEngineResponse FixedCommission(DiscountRules rules,Optional<PartnerTransaction> partner_transaction);
+	public RuleEngineResponse FixedCommission(DiscountRules rules, Optional<PartnerTransaction> partner_transaction);
 	
 	//Method for commission based on percentage
 	public RuleEngineResponse PercentageCommission(DiscountRules rules,Optional<PartnerTransaction> partner_transaction);

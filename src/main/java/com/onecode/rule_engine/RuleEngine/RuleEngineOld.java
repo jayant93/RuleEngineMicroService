@@ -1,11 +1,12 @@
 package com.onecode.rule_engine.RuleEngine;
 
 import java.util.ArrayList;
+
+import com.onecode.rule_engine.model.DiscountRules;
+import com.onecode.rule_engine.model.PartnerTransaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.onecode.rule_engine.repository.DiscountRulesRepository;
 import com.onecode.rule_engine.repository.PartnerTransactionRepository;
-import com.onecode.rule_engine.model.DiscountRules;
-import com.onecode.rule_engine.model.PartnerTransaction;
 
 
 public class RuleEngineOld {
@@ -19,7 +20,7 @@ public class RuleEngineOld {
     ArrayList<DiscountRules> Rules;
     
     @Autowired
-    PartnerTransaction partnerTransaction;
+	PartnerTransaction partnerTransaction;
     
     Double TotalNumberOfTransactions =0.0;  
     

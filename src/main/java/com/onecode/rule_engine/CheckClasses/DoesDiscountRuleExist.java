@@ -3,16 +3,16 @@ package com.onecode.rule_engine.CheckClasses;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.onecode.rule_engine.RuleEngineInterface.CheckCaseInterface;
 import com.onecode.rule_engine.model.DiscountRules;
 import com.onecode.rule_engine.model.PartnerTransaction;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.onecode.rule_engine.repository.DiscountRulesRepository;
 
 @Component
-public class DoesDiscountRuleExist implements CheckCaseInterface{
+public class DoesDiscountRuleExist implements CheckCaseInterface {
 
 	@Autowired
 	DiscountRulesRepository rule_repo;

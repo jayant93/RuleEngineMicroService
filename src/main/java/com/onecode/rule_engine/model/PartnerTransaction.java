@@ -45,9 +45,12 @@ public class PartnerTransaction implements Serializable {
     @NotNull
     private Double amount;
 
-    @Column(name ="partner_transaction_id")
-    @NotNull
-    private  String patrnerTransactionId;
+	@Column(name ="partner_transaction_id")
+	@NotNull
+	private  String patrnerTransactionId;
+
+	@Column(name ="partner_user_hash")
+	private  String partnerUserHash;
 
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
@@ -117,6 +120,10 @@ public class PartnerTransaction implements Serializable {
 	public void setPatrnerTransactionId(String patrnerTransactionId) {
 		this.patrnerTransactionId = patrnerTransactionId;
 	}
+
+	public String getPartnerUserHash() { return partnerUserHash; }
+
+	public void setPartnerUserHash(String partnerUserHash) { this.partnerUserHash = partnerUserHash; }
 
 	public Date getCreatedAt() {
 		return createdAt;

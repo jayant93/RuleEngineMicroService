@@ -1,4 +1,4 @@
-package com.onecode;
+package com.onecode.rule_engine;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

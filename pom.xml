@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>one.onecode</groupId>
-	<artifactId>onecodeRuleEngineproject</artifactId>
+	<artifactId>rule-engine</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>onecodeproject</name>
+	<name>rule-engine</name>
 	<description>OneCode RuleEngine server</description>
 
 	<properties>
@@ -64,7 +64,10 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
-
+		<dependency>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka</artifactId>
+		</dependency>
 
 
 	</dependencies>
@@ -74,6 +77,16 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${maven-surefire-plugin.version}</version>
+				<configuration>
+					<!-- Force alphabetical order to have a reproducible build -->
+					<runOrder>alphabetical</runOrder>
+					<useSystemClassLoader>false</useSystemClassLoader>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

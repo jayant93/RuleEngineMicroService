@@ -14,26 +14,11 @@ public class IsTransactionIdPresent implements CheckCaseInterface {
 	boolean status = false;
 	
 	@Override
-	public boolean checkForTransactionId(Optional<PartnerTransaction> partner_transaction) {
+	public boolean validate(Optional<PartnerTransaction> partner_transaction) {
 			status = partner_transaction.isPresent();
 		return status;
 	}
 
-	@Override
-	public boolean checkForPartnerId(Optional<PartnerTransaction> partner_transaction) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	
 
-	@Override
-	public boolean CheckForDiscountRule(Optional<PartnerTransaction> partner_transaction) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean CheckForDiscountRuleAmbiquity(List<DiscountRules> rules) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 }

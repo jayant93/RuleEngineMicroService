@@ -16,6 +16,7 @@ import com.onecode.rule_engine.CheckClasses.IsTransactionIdPresent;
 import com.onecode.rule_engine.DiscountRulesClasses.FixedDiscountRule;
 import com.onecode.rule_engine.DiscountRulesClasses.PercentageBasedDiscountRule;
 import com.onecode.rule_engine.RuleEngine.FetchDiscountRules;
+import com.onecode.rule_engine.RuleEngineInterface.CheckCaseInterface;
 import com.onecode.rule_engine.model.DiscountRules;
 import com.onecode.rule_engine.model.PartnerTransaction;
 import com.onecode.rule_engine.repository.DiscountRulesRepository;
@@ -40,6 +41,8 @@ public class RuleEngineService {
 	@Autowired
 	List<DiscountRules> rules;
 
+	@Autowired
+	TransactionDao saveTransaction;
 		
 	@Autowired
 	FixedDiscountRule fixedrule;
@@ -50,6 +53,9 @@ public class RuleEngineService {
 	@Autowired
 	PercentageBasedDiscountRule percentageRule;
 
+	
+	CheckCaseInterface check;
+	
 	Long transaction_partner_id;
 
 	RuleEngineResponse response;
@@ -59,19 +65,6 @@ public class RuleEngineService {
 	boolean PartnerIdStatus = true;
 	boolean DiscountRulesStatus = true;
 
-	// CheckCases Classes
-	@Autowired
-	IsTransactionIdPresent checkforTransactionId;
-
-	@Autowired
-	DoesPartnerExist checkforRelatedPartner;
-
-	@Autowired
-	DoesDiscountRuleExist checkforDiscountRules;
-	
-	@Autowired
-	DiscountRulesAmbiquityCheck checkForDiscountRuleAmbiquity;
-	
 	
 	@Autowired
 	CalculatingDiscount calculateCommission;
@@ -96,7 +89,8 @@ public class RuleEngineService {
 		 * Testing if transaction exists or not
 		 */
 		if(RuleEngineChecks.TransactionCheck) {
-				TransactionIdStatus = checkforTransactionId.checkForTransactionId(partner_transaction);
+				check = new IsTransactionIdPresent();
+				TransactionIdStatus = check.validate(partner_transaction);
 				RuleEngineChecks.setDiscountRulesFilterationStatus(true);
 		} 
 			if(!TransactionIdStatus) {
@@ -112,7 +106,8 @@ public class RuleEngineService {
 					 */
 								
 					if(RuleEngineChecks.PartnerIdCheck) {
-							PartnerIdStatus = checkforRelatedPartner.checkForPartnerId(partner_transaction);
+						check = new DoesPartnerExist();
+							PartnerIdStatus = check.validate(partner_transaction);
 							RuleEngineChecks.setDiscountRulesFilterationStatus(true);
 							}
 					if(!PartnerIdStatus){
@@ -127,7 +122,8 @@ public class RuleEngineService {
 							 * Testing if DiscountRule associated with transaction exists or not
 							 */		
 									if(RuleEngineChecks.DiscountRuleCheck) {
-											DiscountRulesStatus = checkforDiscountRules.CheckForDiscountRule(partner_transaction);
+										check =new DoesDiscountRuleExist();
+											DiscountRulesStatus = check.validate(partner_transaction);
 											RuleEngineChecks.setDiscountRulesFilterationStatus(true);
 											}
 									 if(!DiscountRulesStatus){
@@ -143,42 +139,19 @@ public class RuleEngineService {
 									 */
 												if(RuleEngineChecks.isDiscountRulesFilterationStatus()) {
 													rules = FetchRules.getDiscountRule(partner_transaction);
+													if(rules.size()>0)
+													RuleEngineChecks.setCalculateCommission(true);
 												}
-												
-										/*
-										 * Testing Rules List for Ambiquity		
-										 */
-//												if(RuleEngineChecks.isDiscountRulesFilterationStatus() &&
-//														RuleEngineChecks.DiscountRuleAmbiquityCheck) {
-//														if(!checkForDiscountRuleAmbiquity.CheckForDiscountRuleAmbiquity(rules))
-//														{
-
-			// FILTERING DISCOUNT RULES HERE _ NEEDS TO BE REMOVED
-
-			filterDiscountRules();
-
-			// FILTERING DISCOUNT RULES HERE _ NEEDS TO BE REMOVED
-			RuleEngineChecks.setCalculateCommission(true);
-//														}
-//												}
-																	
+								
+		
 															/*
 															 *CheckIfwehaveCalculateCommissionOrNot		
 															 */
 																	if(RuleEngineChecks.isCalculateCommission()) {
 																		response = calculateCommission.CalculateCommission(rules.get(0),partner_transaction);
 																		// create an entry for transaction in database here
-																		partner_transaction.ifPresent(partnerTransaction -> {
-																			Transaction transaction = new Transaction();
-																			transaction.setAmount(response.getUser_Commission());
-																			transaction.setPayOut(response.getUser_Commission() - response.getOneCode_Commission());
-																			transaction.setPartnerId(partnerTransaction.getPartnerId());
-																			transaction.setUserId(partnerTransaction.getUserId());
-																			transaction.setPartnerTransactionId(partnerTransaction.getId());
-																			transaction.setDicountRuleId(rules.get(0).getId());
-																			transaction_repo.save(transaction);
-																		});
-																	}
+																		saveTransaction.save(rules.get(0),response,partner_transaction);
+																				}
 																	
 						/*
 						 * FINAL STEp return commission with response											
@@ -187,50 +160,8 @@ public class RuleEngineService {
 
 	}
 
-	private void filterDiscountRules() {
-		partner_transaction.ifPresent(partnerTransaction -> {
-			// if there are more rules available to check
-			if (rules.size() > 1) {
 
-				DiscountRules currentRule = rules.get(0);
-
-				if (currentRule.getFlat() != null && currentRule.getFlat()) {
-					setValidRule();
-					return;
-				}
-
-				// if the rule is based on new user or old user check
-				if(currentRule.getIsNew() != null) {
-					// whether the transaction has a value for NewUser
-					// and if it matches that of the rule
-					if(partnerTransaction.getIsNewUser() != null
-							&& currentRule.getIsNew() == partnerTransaction.getIsNewUser()) {
-						setValidRule();
-						return;
-					}
-				}
-
-				// if the rule is based on count
-				if (currentRule.getCountBased() != null) {
-					Long transactionCount = partner_transaction_repo.findNumberOfTransactions(partnerTransaction.getId(), partnerTransaction.getPartnerUserHash());
-					if (transactionCount <= currentRule.getMaxTransactionCount()
-						&& transactionCount >= currentRule.getMinTransactionCount()) {
-						setValidRule();
-						return;
-					}
-				}
-
-				// if rule passes nothing remove it and make a recursive call
-				rules.remove(0);
-				filterDiscountRules();
-			}
-		});
-	}
-
-	// Removes all other rules if one qualifying rule is found
-	private void setValidRule() {
-		DiscountRules validRule = rules.get(0);
-		rules.clear();
-		rules.add(validRule);
-	}
+	
+	
+	
 }

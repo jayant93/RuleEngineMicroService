@@ -38,13 +38,16 @@ public class TransactionDao {
 											catch(IllegalArgumentException ae)
 											{
 														ae.printStackTrace();
+														return;
 												
 											}	
 											catch(NegativeValueException ne) {
 												System.err.println(ne);
+												return;
 											}
 											catch(NullPointerException ae) {
 														ae.printStackTrace();
+														return;
 											}
 											
 											transaction_repo.save(transaction);

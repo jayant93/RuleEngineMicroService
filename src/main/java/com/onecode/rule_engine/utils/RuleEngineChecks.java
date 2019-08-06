@@ -17,7 +17,7 @@ public class RuleEngineChecks {
 	public static boolean DiscountRulesFilterationStatus;
 	
 	public static boolean CalculateCommission;
-	
+
 	
 	public void setChecks() {
 	

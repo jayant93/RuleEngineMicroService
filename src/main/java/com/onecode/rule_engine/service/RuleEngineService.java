@@ -5,11 +5,8 @@ import java.util.Optional;
 
 import com.onecode.rule_engine.repository.TransactionRepository;
 import com.onecode.rule_engine.responses.RuleEngineResponse;
-import com.onecode.rule_engine.model.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.onecode.rule_engine.CheckClasses.DiscountRulesAmbiquityCheck;
 import com.onecode.rule_engine.CheckClasses.DoesDiscountRuleExist;
 import com.onecode.rule_engine.CheckClasses.DoesPartnerExist;
 import com.onecode.rule_engine.CheckClasses.IsTransactionIdPresent;
@@ -72,6 +69,8 @@ public class RuleEngineService {
 	Boolean DiscountRulesFilterationStatus;
 	
 	public RuleEngineResponse StartCollectingTransactionInfo(Long transaction_id) {
+		
+
 
 		Double Zero = Double.valueOf(0);
 
@@ -82,8 +81,8 @@ public class RuleEngineService {
 		 * there any discount rule present related to that partner id Lets Start the
 		 * Selections
 		 */
+	
 		partner_transaction = partner_transaction_repo.findById(transaction_id);
-
 	
 		/*
 		 * Testing if transaction exists or not

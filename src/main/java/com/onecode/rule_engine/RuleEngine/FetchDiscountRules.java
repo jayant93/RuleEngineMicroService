@@ -72,6 +72,7 @@ public class FetchDiscountRules {
 					Long transactionCount = partner_transaction_repo.findNumberOfTransactions
 							(partnerTransaction.getId(), partnerTransaction.getPartnerUserHash());
 					
+
 					if (transactionCount <= currentRule.getMaxTransactionCount()
 						&& transactionCount >= currentRule.getMinTransactionCount()) {
 						setValidRule();

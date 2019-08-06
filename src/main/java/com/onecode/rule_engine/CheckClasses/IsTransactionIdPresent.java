@@ -15,8 +15,18 @@ public class IsTransactionIdPresent implements CheckCaseInterface {
 	
 	@Override
 	public boolean validate(Optional<PartnerTransaction> partner_transaction) {
-			status = partner_transaction.isPresent();
-		return status;
+		
+		
+		try {
+			partner_transaction.orElseThrow();
+			status = true;
+			}catch(NullPointerException ae){
+				status = false;
+			ae.printStackTrace();
+		}
+		
+			return status;
+		
 	}
 
 	

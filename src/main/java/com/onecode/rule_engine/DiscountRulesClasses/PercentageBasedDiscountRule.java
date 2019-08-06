@@ -18,14 +18,9 @@ public class PercentageBasedDiscountRule implements CommissionInterface {
 	
 	Double Temp;
 	
-	@Override
-	public RuleEngineResponse FixedCommission(DiscountRules rules, Optional<PartnerTransaction> partner_transaction) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
-	public RuleEngineResponse PercentageCommission(DiscountRules rule,Optional<PartnerTransaction> partner_transaction) {
+	public RuleEngineResponse CalculateCommission(DiscountRules rule,Optional<PartnerTransaction> partner_transaction) {
 		partner_transaction.ifPresent(tran ->{
 			 Temp = (tran.getAmount() * rule.getPartnerDiscount()) /100;	
 		});
@@ -35,12 +30,6 @@ public class PercentageBasedDiscountRule implements CommissionInterface {
 		return response;
 	}
 
-	@Override
-	public RuleEngineResponse IncrementalCommission(DiscountRules rules,
-			Optional<PartnerTransaction> partner_transaction) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 
 }

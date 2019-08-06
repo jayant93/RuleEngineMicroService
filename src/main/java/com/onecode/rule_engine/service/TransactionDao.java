@@ -10,6 +10,8 @@ import com.onecode.rule_engine.model.PartnerTransaction;
 import com.onecode.rule_engine.model.Transaction;
 import com.onecode.rule_engine.repository.TransactionRepository;
 import com.onecode.rule_engine.responses.RuleEngineResponse;
+import com.onecode.rule_engine.Exceptions.NegativeValueException;
+
 
 @Component
 public class TransactionDao {
@@ -22,12 +24,29 @@ public class TransactionDao {
 		//creating an entry in the db for transaction
 		partner_transaction.ifPresent(partnerTransaction -> {
 											Transaction transaction = new Transaction();
+											try {
 											transaction.setAmount(response.getUser_Commission());
+											if(response.getUser_Commission() - response.getOneCode_Commission() <= 0) {
+												throw new NegativeValueException("Commission can't be less than Zero");
+											}
 											transaction.setPayOut(response.getUser_Commission() - response.getOneCode_Commission());
 											transaction.setPartnerId(partnerTransaction.getPartnerId());
 											transaction.setUserId(partnerTransaction.getUserId());
 											transaction.setPartnerTransactionId(partnerTransaction.getId());
 											transaction.setDicountRuleId(rule.getId());
+											}
+											catch(IllegalArgumentException ae)
+											{
+														ae.printStackTrace();
+												
+											}	
+											catch(NegativeValueException ne) {
+												System.err.println(ne);
+											}
+											catch(NullPointerException ae) {
+														ae.printStackTrace();
+											}
+											
 											transaction_repo.save(transaction);
 		});
 

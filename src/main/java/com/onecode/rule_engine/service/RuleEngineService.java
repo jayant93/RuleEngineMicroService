@@ -82,75 +82,105 @@ public class RuleEngineService {
 		 * Selections
 		 */
 	
-		partner_transaction = partner_transaction_repo.findById(transaction_id);
+		try {
+			partner_transaction = partner_transaction_repo.findById(transaction_id);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	
 		/*
 		 * Testing if transaction exists or not
 		 */
-		if(RuleEngineChecks.TransactionCheck) {
-				check = new IsTransactionIdPresent();
-				TransactionIdStatus = check.validate(partner_transaction);
-				RuleEngineChecks.setDiscountRulesFilterationStatus(true);
-		} 
-			if(!TransactionIdStatus) {
-						RuleEngineChecks.setPartnerIdCheck(false);
-						RuleEngineChecks.setDiscountRuleCheck(false);
-						RuleEngineChecks.setDiscountRulesFilterationStatus(false);
-						RuleEngineChecks.setCalculateCommission(false);
-			response = new RuleEngineResponse(Zero,Zero,"Incomplete","No Transaction Partner Id Present");
-			}
+		try {
+			if(RuleEngineChecks.TransactionCheck) {
+					check = new IsTransactionIdPresent();
+					TransactionIdStatus = check.validate(partner_transaction);
+					RuleEngineChecks.setDiscountRulesFilterationStatus(true);
+			} 
+				if(!TransactionIdStatus) {
+							RuleEngineChecks.setPartnerIdCheck(false);
+							RuleEngineChecks.setDiscountRuleCheck(false);
+							RuleEngineChecks.setDiscountRulesFilterationStatus(false);
+							RuleEngineChecks.setCalculateCommission(false);
+				response = new RuleEngineResponse(Zero,Zero,"Incomplete","No Transaction Partner Id Present");
+				}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 					/*
 					 * Testing if Partner associated with transaction exists or not
 					 */
 								
-					if(RuleEngineChecks.PartnerIdCheck) {
-						check = new DoesPartnerExist();
-							PartnerIdStatus = check.validate(partner_transaction);
-							RuleEngineChecks.setDiscountRulesFilterationStatus(true);
-							}
-					if(!PartnerIdStatus){
-									
-									RuleEngineChecks.setDiscountRuleCheck(false);
-									RuleEngineChecks.setDiscountRulesFilterationStatus(false);
-									RuleEngineChecks.setCalculateCommission(false);
-								response = new RuleEngineResponse(Zero,Zero,"Incomplete","No Transaction Partner Id Present");
-							}
+					try {
+						if(RuleEngineChecks.PartnerIdCheck) {
+							check = new DoesPartnerExist();
+								PartnerIdStatus = check.validate(partner_transaction);
+								RuleEngineChecks.setDiscountRulesFilterationStatus(true);
+								}
+						if(!PartnerIdStatus){
+										
+										RuleEngineChecks.setDiscountRuleCheck(false);
+										RuleEngineChecks.setDiscountRulesFilterationStatus(false);
+										RuleEngineChecks.setCalculateCommission(false);
+									response = new RuleEngineResponse(Zero,Zero,"Incomplete","No Transaction Partner Id Present");
+								}
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 								
 							/*
 							 * Testing if DiscountRule associated with transaction exists or not
 							 */		
-									if(RuleEngineChecks.DiscountRuleCheck) {
-										check =new DoesDiscountRuleExist();
-											DiscountRulesStatus = check.validate(partner_transaction);
-											RuleEngineChecks.setDiscountRulesFilterationStatus(true);
-											}
-									 if(!DiscountRulesStatus){
-													
-													RuleEngineChecks.setDiscountRulesFilterationStatus(false);
-													RuleEngineChecks.setCalculateCommission(false);
-												response =new RuleEngineResponse(Zero,Zero,"Incomplete","No Discount Rules Present"); 
-											}
+									try {
+										if(RuleEngineChecks.DiscountRuleCheck) {
+											check =new DoesDiscountRuleExist();
+												DiscountRulesStatus = check.validate(partner_transaction);
+												RuleEngineChecks.setDiscountRulesFilterationStatus(true);
+												}
+										 if(!DiscountRulesStatus){
+														
+														RuleEngineChecks.setDiscountRulesFilterationStatus(false);
+														RuleEngineChecks.setCalculateCommission(false);
+													response =new RuleEngineResponse(Zero,Zero,"Incomplete","No Discount Rules Present"); 
+												}
+									} catch (Exception e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
 				
 									
 									/*
 									 * Fetching the discount Rules
 									 */
-												if(RuleEngineChecks.isDiscountRulesFilterationStatus()) {
-													rules = FetchRules.getDiscountRule(partner_transaction);
-													if(rules.size()>0)
-													RuleEngineChecks.setCalculateCommission(true);
+												try {
+													if(RuleEngineChecks.isDiscountRulesFilterationStatus()) {
+														rules = FetchRules.getDiscountRule(partner_transaction);
+														if(rules.size()>0)
+														RuleEngineChecks.setCalculateCommission(true);
+													}
+												} catch (Exception e) {
+													// TODO Auto-generated catch block
+													e.printStackTrace();
 												}
 								
 		
 															/*
 															 *CheckIfwehaveCalculateCommissionOrNot		
 															 */
-																	if(RuleEngineChecks.isCalculateCommission()) {
-																		response = calculateCommission.CalculateCommission(rules.get(0),partner_transaction);
-																		// create an entry for transaction in database here
-																		saveTransaction.save(rules.get(0),response,partner_transaction);
-																				}
+																	try {
+																		if(RuleEngineChecks.isCalculateCommission()) {
+																			response = calculateCommission.CalculateCommission(rules.get(0),partner_transaction);
+																			// create an entry for transaction in database here
+																			saveTransaction.save(rules.get(0),response,partner_transaction);
+																					}
+																	} catch (Exception e) {
+																		// TODO Auto-generated catch block
+																		e.printStackTrace();
+																	}
 																	
 						/*
 						 * FINAL STEp return commission with response											

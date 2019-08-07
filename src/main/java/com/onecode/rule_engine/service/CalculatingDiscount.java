@@ -23,15 +23,25 @@ public class CalculatingDiscount {
 	
 	public RuleEngineResponse CalculateCommission(DiscountRules rule,Optional<PartnerTransaction> partner_transaction)
 	{
-						if(rule.getDiscountType().equalsIgnoreCase("Percentage")) {
-							Commission = new PercentageBasedDiscountRule();
-									}
+						try {
+							if(rule.getDiscountType().equalsIgnoreCase("Percentage")) {
+								Commission = new PercentageBasedDiscountRule();
+										}
 
-								else if(rule.getDiscountType().equalsIgnoreCase("Fixed")) {
-									Commission = new FixedDiscountRule();
-								}
+									else if(rule.getDiscountType().equalsIgnoreCase("Fixed")) {
+										Commission = new FixedDiscountRule();
+									}
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 		
-					response = Commission.CalculateCommission(rule, partner_transaction);
+					try {
+						response = Commission.CalculateCommission(rule, partner_transaction);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					
 					return response;
 	}

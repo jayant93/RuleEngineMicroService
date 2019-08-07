@@ -50,7 +50,12 @@ public class TransactionDao {
 														return;
 											}
 											
-											transaction_repo.save(transaction);
+											try {
+												transaction_repo.save(transaction);
+											} catch (Exception e) {
+												// TODO Auto-generated catch block
+												e.printStackTrace();
+											}
 		});
 
 		

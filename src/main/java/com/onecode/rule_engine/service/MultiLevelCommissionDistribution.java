@@ -40,7 +40,7 @@ public class MultiLevelCommissionDistribution {
 			
 				
 			onecode = user_repo.findByIdAndAndIsVerified(transaction.getUserId(),true);
-				if(onecode!=null) {
+				if(onecode.getParent_id()!=null) {
 				
 					if(response.getUser_Commission() > 1 
 							&& response.getOneCode_Commission() >1

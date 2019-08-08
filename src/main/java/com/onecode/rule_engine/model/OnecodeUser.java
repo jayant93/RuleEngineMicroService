@@ -4,6 +4,7 @@ package com.onecode.rule_engine.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -12,6 +13,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+@Component
 @Entity
 @Table(name = "onecodeuser")
 @JsonIgnoreProperties(value = {"createdAt", "updatedAt"},
@@ -38,8 +40,20 @@ public class OnecodeUser implements Serializable {
     @Column(name="password",length = 200)
     private String password;
 
-    @Column(name = "referrer_code",length = 200)
-    private String referrerCode;
+    
+
+
+
+	public Long getParent_id() {
+		return parent_id;
+	}
+
+	public void setParent_id(Long parent_id) {
+		this.parent_id = parent_id;
+	}
+
+	@Column(name = "parent_id",length = 200)
+    private Long parent_id;
 
 
 
@@ -102,13 +116,7 @@ public class OnecodeUser implements Serializable {
         return isVerified;
     }
 
-    public String getReferrerCode() {
-        return referrerCode;
-    }
-
-    public void setReferrerCode(String referrerCode) {
-        this.referrerCode = referrerCode;
-    }
+   
 
     public void setVerified(boolean verified) {
         isVerified = verified;

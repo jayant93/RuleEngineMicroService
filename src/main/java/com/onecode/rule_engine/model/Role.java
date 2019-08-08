@@ -1,11 +1,13 @@
 package com.onecode.rule_engine.model;
 
 import org.hibernate.annotations.NaturalId;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+@Component
 @Entity
 @Table(name = "role")
 public class Role {

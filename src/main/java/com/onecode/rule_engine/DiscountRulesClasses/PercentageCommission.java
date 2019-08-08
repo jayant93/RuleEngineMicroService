@@ -7,11 +7,10 @@ import com.onecode.rule_engine.model.PartnerTransaction;
 import com.onecode.rule_engine.responses.RuleEngineResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import com.onecode.rule_engine.RuleEngineInterface.CommissionInterface;
+import com.onecode.rule_engine.RuleEngineInterface.CommissionProcessor;
 
 @Component
-public class PercentageBasedDiscountRule implements CommissionInterface {
+public class PercentageCommission extends CommissionProcessor{
 
 	@Autowired
 	RuleEngineResponse response;
@@ -19,13 +18,12 @@ public class PercentageBasedDiscountRule implements CommissionInterface {
 	Double Temp;
 	
 
-	@Override
 	public RuleEngineResponse CalculateCommission(DiscountRules rule,Optional<PartnerTransaction> partner_transaction) {
 		partner_transaction.ifPresent(tran ->{
 			 Temp = (tran.getAmount() * rule.getPartnerDiscount()) /100;	
 		});
 			
-		response = new RuleEngineResponse(Temp,(Temp*10)/100,"success","User gets Percentage based commission");
+		response = new RuleEngineResponse(Temp-(Temp*10)/100,(Temp*10)/100,"success","User gets Percentage based commission");
 		
 		return response;
 	}

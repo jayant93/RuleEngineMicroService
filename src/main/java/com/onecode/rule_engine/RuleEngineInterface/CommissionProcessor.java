@@ -6,7 +6,10 @@ import com.onecode.rule_engine.model.DiscountRules;
 import com.onecode.rule_engine.model.PartnerTransaction;
 import com.onecode.rule_engine.responses.RuleEngineResponse;
 
-public interface CommissionInterface {
+public abstract class CommissionProcessor {
 
-		public RuleEngineResponse CalculateCommission(DiscountRules rules,Optional<PartnerTransaction> partner_transaction);
+
+	public abstract RuleEngineResponse CalculateCommission(DiscountRules rules,Optional<PartnerTransaction> partner_transaction);
+
+	
 }

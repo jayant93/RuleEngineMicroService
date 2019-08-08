@@ -12,7 +12,6 @@ public interface UserRepository extends JpaRepository<OnecodeUser, Long> {
 
     OnecodeUser findByOnecodeAndIsVerified(String onecode,Boolean isActive);
 
-    Long findAllByReferrerCode(String referrerCode);
 
     void deleteOnecodeUserById(Long userId);
 

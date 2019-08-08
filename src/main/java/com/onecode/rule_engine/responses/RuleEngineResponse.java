@@ -13,6 +13,16 @@ public class RuleEngineResponse {
 	
 	String Reason;
 	
+	Double amount;
+	
+	public Double getAmount() {
+		return amount;
+	}
+
+	public void setAmount(Double amount) {
+		this.amount = amount;
+	}
+
 	public RuleEngineResponse(Double user_Commission, Double oneCode_Commission, String transaction_Status, String reason) {
 		User_Commission = user_Commission;
 		OneCode_Commission = oneCode_Commission;

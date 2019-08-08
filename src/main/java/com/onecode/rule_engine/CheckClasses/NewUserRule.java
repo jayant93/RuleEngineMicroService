@@ -1,10 +1,11 @@
 package com.onecode.rule_engine.CheckClasses;
 
-import com.onecode.rule_engine.RuleEngineInterface.DiscountRuleCheck;
+
+import com.onecode.rule_engine.RuleEngineInterface.DiscountRuleProcessor;
 import com.onecode.rule_engine.model.DiscountRules;
 import com.onecode.rule_engine.model.PartnerTransaction;
 
-public class isNew implements DiscountRuleCheck{
+public class NewUserRule implements DiscountRuleProcessor{
 
 	boolean status = false;
 	

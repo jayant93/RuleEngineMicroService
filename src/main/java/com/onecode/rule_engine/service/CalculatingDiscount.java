@@ -1,22 +1,21 @@
 package com.onecode.rule_engine.service;
 
 import java.util.Optional;
-
 import com.onecode.rule_engine.responses.RuleEngineResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import com.onecode.rule_engine.DiscountRulesClasses.FixedDiscountRule;
-import com.onecode.rule_engine.DiscountRulesClasses.IncrementalDiscountRule;
-import com.onecode.rule_engine.DiscountRulesClasses.PercentageBasedDiscountRule;
-import com.onecode.rule_engine.RuleEngineInterface.CommissionInterface;
+import com.onecode.rule_engine.DiscountRulesClasses.FlatCommission;
+import com.onecode.rule_engine.DiscountRulesClasses.PercentageCommission;
+import com.onecode.rule_engine.RuleEngineInterface.CommissionProcessor;
 import com.onecode.rule_engine.model.DiscountRules;
 import com.onecode.rule_engine.model.PartnerTransaction;
 
 @Component
 public class CalculatingDiscount {
 
-	CommissionInterface Commission;
+	PercentageCommission percentageCommission;
+	
+	FlatCommission flatCommission;
 	
 	@Autowired
 	RuleEngineResponse response;
@@ -25,24 +24,17 @@ public class CalculatingDiscount {
 	{
 						try {
 							if(rule.getDiscountType().equalsIgnoreCase("Percentage")) {
-								Commission = new PercentageBasedDiscountRule();
+										response = percentageCommission.CalculateCommission(rule, partner_transaction);
 										}
 
 									else if(rule.getDiscountType().equalsIgnoreCase("Fixed")) {
-										Commission = new FixedDiscountRule();
+										response = flatCommission.CalculateCommission(rule, partner_transaction);
 									}
 						} catch (Exception e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 		
-					try {
-						response = Commission.CalculateCommission(rule, partner_transaction);
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					
+				
 					return response;
 	}
 }

@@ -4,9 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+
+import org.springframework.stereotype.Component;
+
 import java.io.Serializable;
 import java.util.Date;
 
+@Component
 @Entity
 @Table(name = "transaction")
 @JsonIgnoreProperties(value = {"updatedAt","createdAt","deleatedAt"},allowGetters = true)
@@ -43,7 +47,20 @@ public class Transaction implements Serializable {
     @NotNull
     private  String status;
 
-    @Column(name = "updated_at")
+    @Column(name = "parent_id",length = 200)
+    private String parent_id;
+
+    
+   
+	public String getParent_id() {
+		return parent_id;
+	}
+
+	public void setParent_id(String parent_id) {
+		this.parent_id = parent_id;
+	}
+
+	@Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
 

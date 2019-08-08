@@ -15,5 +15,8 @@ public interface PartnerTransactionRepository extends JpaRepository<PartnerTrans
 	@Query(value="Select count(id) as num from partner_transaction where partner_id = :partner_id and partner_user_hash = :partner_user_hash",nativeQuery=true)
 	Long findNumberOfTransactions(@Param("partner_id") Long id, @Param("partner_user_hash") String hash);
 
+	@Query(value="Select * from partner_transaction where id = :id and parent_id IS NOT NULL",nativeQuery = true)
+	PartnerTransaction getTransactionIfParentPresent(@Param("id")Long id);
+
 
 }

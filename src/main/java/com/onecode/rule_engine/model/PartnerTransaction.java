@@ -3,6 +3,7 @@ package com.onecode.rule_engine.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -10,6 +11,7 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 
+@Component
 @Entity
 @Table(name = "partner_transaction")
 @JsonIgnoreProperties(value = {"createdAt","updatedAt","deleatedAt"},

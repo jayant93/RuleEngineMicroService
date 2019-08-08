@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @Component
-public class RuleEngineProcessing {
+public class RuleEngine {
 
 	@Autowired
 	RuleEngineService rule;
@@ -17,9 +17,9 @@ public class RuleEngineProcessing {
 	@Autowired(required = true)
 	RuleEngineChecks checks;
 
-	public void startRuleEngine(Long transaction_id) {
+	public void start(Long transaction_id) {
 		checks.setChecks();
-		rule.StartCollectingTransactionInfo(transaction_id);
+		rule.StartProcessing(transaction_id);
 	}
 	
 }

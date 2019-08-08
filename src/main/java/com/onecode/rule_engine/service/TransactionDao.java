@@ -1,5 +1,7 @@
 package com.onecode.rule_engine.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,49 +20,13 @@ public class TransactionDao {
 
 	@Autowired
 	TransactionRepository transaction_repo;
-	
-	public void save(DiscountRules rule,RuleEngineResponse response, Optional<PartnerTransaction> partner_transaction) {
-	
-		//creating an entry in the db for transaction
-		partner_transaction.ifPresent(partnerTransaction -> {
-											Transaction transaction = new Transaction();
-											try {
-											transaction.setAmount(response.getUser_Commission());
-											if(response.getUser_Commission() - response.getOneCode_Commission() <= 0) {
-												throw new NegativeValueException("Commission can't be less than Zero");
-											}
-											transaction.setPayOut(response.getUser_Commission() - response.getOneCode_Commission());
-											transaction.setPartnerId(partnerTransaction.getPartnerId());
-											transaction.setUserId(partnerTransaction.getUserId());
-											transaction.setPartnerTransactionId(partnerTransaction.getId());
-											transaction.setDicountRuleId(rule.getId());
-											}
-											catch(IllegalArgumentException ae)
-											{
-														ae.printStackTrace();
-														return;
-												
-											}	
-											catch(NegativeValueException ne) {
-												System.err.println(ne);
-												return;
-											}
-											catch(NullPointerException ae) {
-														ae.printStackTrace();
-														return;
-											}
-											
-											try {
-												transaction_repo.save(transaction);
-											} catch (Exception e) {
-												// TODO Auto-generated catch block
-												e.printStackTrace();
-											}
-		});
 
-		
+	
+	public void saveTransactions(ArrayList<Transaction> ListOfTransaction) {
+		//Iterations for saving all the transactions
+		for(int i=0;i< ListOfTransaction.size();i++) {
+				transaction_repo.save(ListOfTransaction.get(i));
+		}
 	}
-
-	
 	
 }

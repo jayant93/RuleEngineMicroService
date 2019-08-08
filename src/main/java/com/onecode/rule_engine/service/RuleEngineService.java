@@ -10,8 +10,6 @@ import org.springframework.stereotype.Service;
 import com.onecode.rule_engine.CheckClasses.DoesDiscountRuleExist;
 import com.onecode.rule_engine.CheckClasses.DoesPartnerExist;
 import com.onecode.rule_engine.CheckClasses.IsTransactionIdPresent;
-import com.onecode.rule_engine.DiscountRulesClasses.FixedDiscountRule;
-import com.onecode.rule_engine.DiscountRulesClasses.PercentageBasedDiscountRule;
 import com.onecode.rule_engine.RuleEngine.FetchDiscountRules;
 import com.onecode.rule_engine.RuleEngineInterface.CheckCaseInterface;
 import com.onecode.rule_engine.model.DiscountRules;
@@ -42,14 +40,10 @@ public class RuleEngineService {
 	TransactionDao saveTransaction;
 		
 	@Autowired
-	FixedDiscountRule fixedrule;
-
-	@Autowired
 	FetchDiscountRules FetchRules;
-	
-	@Autowired
-	PercentageBasedDiscountRule percentageRule;
 
+	@Autowired
+	MultiLevelCommissionDistribution multilevel;
 	
 	CheckCaseInterface check;
 	
@@ -68,7 +62,7 @@ public class RuleEngineService {
 
 	Boolean DiscountRulesFilterationStatus;
 	
-	public RuleEngineResponse StartCollectingTransactionInfo(Long transaction_id) {
+	public RuleEngineResponse StartProcessing(Long transaction_id) {
 		
 
 
@@ -174,8 +168,15 @@ public class RuleEngineService {
 																	try {
 																		if(RuleEngineChecks.isCalculateCommission()) {
 																			response = calculateCommission.CalculateCommission(rules.get(0),partner_transaction);
+																			//Calculating multi level commission
+																			
+																			partner_transaction.ifPresent(transaction ->{
+																				multilevel.MultiLevelCommissionCalculation(rules.get(0),response,transaction);	
+																			});
+																			
 																			// create an entry for transaction in database here
-																			saveTransaction.save(rules.get(0),response,partner_transaction);
+																			
+																			//saveTransaction.save(rules.get(0),response,partner_transaction);
 																					}
 																	} catch (Exception e) {
 																		// TODO Auto-generated catch block
@@ -188,6 +189,8 @@ public class RuleEngineService {
 		return response;
 
 	}
+
+
 
 
 	

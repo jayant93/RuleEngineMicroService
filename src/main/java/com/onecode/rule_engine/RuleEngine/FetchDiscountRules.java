@@ -3,10 +3,10 @@ package com.onecode.rule_engine.RuleEngine;
 import java.util.List;
 import java.util.Optional;
 
-import com.onecode.rule_engine.CheckClasses.IsFlat;
-import com.onecode.rule_engine.CheckClasses.isCountBased;
-import com.onecode.rule_engine.CheckClasses.isNew;
-import com.onecode.rule_engine.RuleEngineInterface.DiscountRuleCheck;
+import com.onecode.rule_engine.CheckClasses.CountBasedRule;
+import com.onecode.rule_engine.CheckClasses.FlatRule;
+import com.onecode.rule_engine.CheckClasses.NewUserRule;
+import com.onecode.rule_engine.RuleEngineInterface.DiscountRuleProcessor;
 import com.onecode.rule_engine.model.DiscountRules;
 import com.onecode.rule_engine.model.PartnerTransaction;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class FetchDiscountRules {
 	@Autowired
 	DiscountRulesRepository rule_repo;
 	
-	DiscountRuleCheck Rulecheck;
+	DiscountRuleProcessor Rulecheck;
 	
 	
 	@Autowired
@@ -61,7 +61,7 @@ public class FetchDiscountRules {
 
 				
 				try {
-					Rulecheck = new IsFlat();
+					Rulecheck = new FlatRule();
 					if (Rulecheck.isValid(currentRule)) {
 						setValidRule();
 						return;
@@ -72,7 +72,7 @@ public class FetchDiscountRules {
 
 				try {
 					if(currentRule.getIsNew() != null) {
-						Rulecheck = new isNew();
+						Rulecheck = new NewUserRule();
 					
 						if(Rulecheck.isValid(currentRule,partnerTransaction)){
 							setValidRule();
@@ -87,7 +87,7 @@ public class FetchDiscountRules {
 			
 				try {
 					if (currentRule.getCountBased() != null) {
-						Rulecheck =new isCountBased();
+						Rulecheck =new CountBasedRule();
 								if (Rulecheck.isValid(currentRule, partnerTransaction)) {
 											setValidRule();
 											return;

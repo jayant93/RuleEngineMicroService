@@ -2,7 +2,7 @@ package com.onecode.rule_engine.KafkaConsumer;
 
 import java.util.concurrent.CountDownLatch;
 
-import com.onecode.rule_engine.RuleEngine.RuleEngineProcessing;
+import com.onecode.rule_engine.RuleEngine.RuleEngine;
 import com.onecode.rule_engine.model.PartnerTransaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,11 +20,11 @@ public class KafkaConsumer {
     }
 
     @Autowired
-    RuleEngineProcessing engine;
+    RuleEngine engine;
 
     @KafkaListener(topics = "transaction",groupId = "transactionQueue")
     public void receive(PartnerTransaction payload) {
-        engine.startRuleEngine(payload.getId());
+        engine.start(payload.getId());
         latch.countDown();
     }
 }
